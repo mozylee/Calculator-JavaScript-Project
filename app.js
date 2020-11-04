@@ -30,6 +30,7 @@ const isError = (btn) => {
 const updateScreenValue = ({ target }) => {
   if (isError(target)) return false;
   if (!screen.value && target.dataset.num === ".") screen.value = "0";
+  if (screen.value.match(/\w/)) screen.value = "";
   screen.value += target.dataset.num;
 };
 btns.forEach((btn) => {
