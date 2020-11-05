@@ -6,10 +6,9 @@ const regex = new RegExp(/[+\-\*/]/, "g");
 
 const isError = (btn) => {
   const lastChar = screen.value.charAt(screen.value.length - 1);
-
   if (
     btn.classList.value.match("btn-yellow") &&
-    (!screen.value || lastChar.match(regex))
+    (!screen.value || lastChar.match(regex) || lastChar === ".")
   )
     return true;
   const amountOfOperator = screen.value.match(regex)
@@ -21,16 +20,19 @@ const isError = (btn) => {
   console.log(screen.value, { amountOfOperator, amountOfdot });
   if (
     btn.dataset.num === "." &&
-    (lastChar === "." || amountOfdot > amountOfOperator)
+    (lastChar === "." ||
+      lastChar.match(regex) ||
+      amountOfdot > amountOfOperator)
   )
     return true;
 
   return false;
 };
 const updateScreenValue = ({ target }) => {
+  console.log(target);
   if (isError(target)) return false;
   if (!screen.value && target.dataset.num === ".") screen.value = "0";
-  if (screen.value.match(/\w/)) screen.value = "";
+  if (screen.value.match(/\\w/)) screen.value = "";
   screen.value += target.dataset.num;
 };
 btns.forEach((btn) => {
@@ -40,7 +42,7 @@ btnClear.addEventListener("click", () => {
   screen.value = "";
 });
 btnEqual.addEventListener("click", () => {
-  if (!screen.value) {
+  if (!screen.value || screen.value == "Please Enter a Value") {
     screen.value = "Please Enter a Value";
     return false;
   }
